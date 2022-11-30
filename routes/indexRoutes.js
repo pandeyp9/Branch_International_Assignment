@@ -35,11 +35,20 @@ router.post("/message", async (req, res) => {
         noOfActiveThread: "asc",
       });
       const agentToAssign = agents[0];
-
-      const newThread = new ThreadModel({
-        user,
-        agent: agentToAssign._id,
-      });
+      let temp = text;
+      let newThread;
+      if (temp.toLowerCase().includes("loan")) {
+        newThread = new ThreadModel({
+          user,
+          agent: agentToAssign._id,
+          priority: 0,
+        });
+      } else {
+        newThread = new ThreadModel({
+          user,
+          agent: agentToAssign._id,
+        });
+      }
 
       const newMessage = new MessageModel({
         messagedBy: "user",
@@ -75,9 +84,11 @@ router.post("/message", async (req, res) => {
         }
       });
 
-      return res
-        .status(201)
-        .json({ message: "Message send and New Agent Assigned" });
+      return res.status(201).json({
+        message: "Message send and New Agent Assigned",
+        agentID: agentToAssign._id,
+        threadID: newThread._id,
+      });
     }
 
     const newMessage = new MessageModel({
@@ -141,10 +152,8 @@ router.get("/get-thread/:agentId", async (req, res) => {
       agent: agentId,
     }).populate("messages");
     findAgent.sort((a, b) => {
-      return b.createdAt - a.createdAt;
-    });
-    findAgent.sort((a, b) => {
-      return b.priority - a.priority;
+      if (b.priority != a.priority) return a.priority - b.priority;
+      return a.createdAt - b.createdAt;
     });
 
     res.status(201).json(findAgent);
