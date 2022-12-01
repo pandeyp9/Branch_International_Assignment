@@ -14,18 +14,19 @@ It is an CS (Customer Support ) Messaging Web App
 ## To Install:
 
 Cloning the Repository:
-
+```
 $ git clone https://github.com/pandeyp9/Branch_International_Assignment_Backend
 $ cd Branch_International_Assignment_Frontend
-
+```
 Create .env file at the root
 
 Add MONGO_URI variable in the .env file and give it the value of the mongodb atlas url
 
 ## Installing the dependencies:
-
+```
 $ npm install
-
+```
 ## Running on localhost:
-
+```
 $ npm run dev
+```
